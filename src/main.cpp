@@ -4,12 +4,17 @@
 #include <LiquidCrystal_I2C.h>
 #include <U8g2lib.h>
 
+#include "Button.h"
+Button Button1(8);
+Button Button2(9);
+
  LiquidCrystal_I2C lcd(0x27,16,2);
 
 int lee_temperatura(int);
 int lee_humedad(int);
 void muestra_puerto_serie();
 void muestra_lcd();
+void botones();
 int temp; 
 int hum; 
 int SENSOR = 2;			// pin DATA de DHT22 a pin digital 2
@@ -31,8 +36,9 @@ void setup() {
 void loop() {
  TEMPERATURA=lee_temperatura(temp);
  HUMEDAD=lee_humedad(hum);
- muestra_puerto_serie();
+ //muestra_puerto_serie();
  muestra_lcd();
+ botones();
   
  
 }
@@ -62,4 +68,55 @@ void muestra_lcd(){
   lcd.print("Hume");
   lcd.setCursor(5,1);
   lcd.print(HUMEDAD);
+}
+void botones(){
+  Button1.Refresh();
+ 
+
+  switch (Button1.GetPressType())
+  {
+  case Button::PressTypes::None:
+  {
+    break;
+  }
+  case Button::PressTypes::SingleClick:
+  {
+    Serial.println("A single click");
+    break;
+  }
+  case Button::PressTypes::DoubleClick:
+  {
+    Serial.println("That was a double click!");
+    break;
+  }
+  case Button::PressTypes::LongClick:
+  {
+    Serial.println("Aaaaannnnnndddd that was a long press");
+    break;
+  }
+  }
+
+ Button2.Refresh();
+  switch (Button2.GetPressType())
+  {
+  case Button::PressTypes::None:
+  {
+    break;
+  }
+  case Button::PressTypes::SingleClick:
+  {
+    Serial.println("A single click");
+    break;
+  }
+  case Button::PressTypes::DoubleClick:
+  {
+    Serial.println("That was a double click!");
+    break;
+  }
+  case Button::PressTypes::LongClick:
+  {
+    Serial.println("Aaaaannnnnndddd that was a long press");
+    break;
+  }
+  }
 }
