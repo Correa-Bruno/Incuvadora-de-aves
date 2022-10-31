@@ -2,6 +2,7 @@
 #include <DHT.h>
 #include <DHT_U.h>
 #include <LiquidCrystal_I2C.h>
+
 #include <U8g2lib.h>
 
 #include "Button.h"
@@ -15,6 +16,8 @@ int lee_humedad(int);
 void muestra_puerto_serie();
 void muestra_lcd();
 void botones();
+void MENU();
+int menu = 0;
 int temp; 
 int hum; 
 int SENSOR = 2;			// pin DATA de DHT22 a pin digital 2
@@ -37,8 +40,9 @@ void loop() {
  TEMPERATURA=lee_temperatura(temp);
  HUMEDAD=lee_humedad(hum);
  //muestra_puerto_serie();
- muestra_lcd();
+ //muestra_lcd();
  botones();
+ MENU();
   
  
 }
@@ -58,7 +62,6 @@ void muestra_puerto_serie(){
   Serial.println(HUMEDAD);
   delay(500);
 }
-
 void muestra_lcd(){
  lcd.setCursor(0,0);
   lcd.print("Temp");
@@ -81,7 +84,11 @@ void botones(){
   }
   case Button::PressTypes::SingleClick:
   {
-    Serial.println("A single click");
+    menu++;
+    if (menu>3){
+      menu=3;
+    }
+    lcd.clear();
     break;
   }
   case Button::PressTypes::DoubleClick:
@@ -105,7 +112,11 @@ void botones(){
   }
   case Button::PressTypes::SingleClick:
   {
-    Serial.println("A single click");
+    menu--;
+    if (menu < 0){
+      menu = 0;
+    }
+    lcd.clear();
     break;
   }
   case Button::PressTypes::DoubleClick:
@@ -118,5 +129,50 @@ void botones(){
     Serial.println("Aaaaannnnnndddd that was a long press");
     break;
   }
+  }
+}
+
+void MENU(){
+  switch (menu){
+    case 0 :{               //Precalentar
+    lcd.setCursor(0,0);
+    lcd.print(">");
+    lcd.setCursor(1,0);
+    lcd.print("Precalentar");
+    lcd.setCursor(1,1);
+    lcd.print("Nacedora");
+    
+    break;
+    }
+    case 1 :{               //Nacedora
+    lcd.setCursor(0,1);
+    lcd.print(">");
+    lcd.setCursor(1,0);
+    lcd.print("Precalentar");
+    lcd.setCursor(1,1);
+    lcd.print("Nacedora");
+ 
+ break;
+ }
+    case 2 :{               //Incubacion
+    lcd.setCursor(0,0);
+    lcd.print(">");
+    lcd.setCursor(1,0);
+    lcd.print("Incubacion");
+    lcd.setCursor(1,1);
+    lcd.print("Configuracion");
+
+break;
+    }
+    case 3 :{               //Configuracion
+    lcd.setCursor(0,1);
+    lcd.print(">");
+    lcd.setCursor(1,0);
+    lcd.print("Incubacion");
+    lcd.setCursor(1,1);
+    lcd.print("Configuracion");
+
+break;
+    }
   }
 }
